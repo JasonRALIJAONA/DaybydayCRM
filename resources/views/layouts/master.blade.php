@@ -185,7 +185,7 @@ use Illuminate\Support\Facades\App;
             <a href="{{ route('data.clear')}}" class="list-group-item childlist"> 
                 <i class="bullet-point"><span></span></i> {{ __('Clear Data') }}
             </a>
-            <a href="{{ route('products.index')}}" class="list-group-item childlist"> 
+            <a href="{{ route('data.import')}}" class="list-group-item childlist"> 
                 <i class="bullet-point"><span></span></i> {{ __('Import Data') }}
         </a>
     </nav>

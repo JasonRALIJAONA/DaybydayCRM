@@ -2,6 +2,8 @@
 namespace App\Services\Data;
 
 use Illuminate\Support\Facades\DB;
+use App\Models\Industry;
+use Illuminate\Support\Facades\Log;
 
 class DataService
 {
@@ -35,5 +37,31 @@ class DataService
 
         // reactivation des cles etrangeres
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+    }
+
+    function import_industry($filename) 
+    {
+        Log::info('Importing industry data from file: ' . $filename);
+
+        // Open the CSV file
+        if (($handle = fopen($filename, 'r')) !== false) {
+            // Read the header row
+            $header = fgetcsv($handle, 1000, ';');
+
+            // Loop through the file line by line
+            while (($data = fgetcsv($handle, 1000, ';')) !== false) {
+                // Create an associative array with the header as keys
+                $row = array_combine($header, $data);
+
+                // Insert the data into the industries table
+                Industry::create([
+                    'external_id' => $row['external_id'],
+                    'name' => $row['name'],
+                ]);
+            }
+
+            // Close the file
+            fclose($handle);
+        }
     }
 }
