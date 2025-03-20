@@ -1,5 +1,5 @@
 <!-- DESKTOP NAV --->
-<button type="button" class="navbar-toggle menu-txt-toggle" style="">
+<button type="button" class="navbar-toggle menu-txt-toggle">
     <span class="icon-bar"></span>
     <span class="icon-bar"></span>
     <span class="icon-bar"></span>

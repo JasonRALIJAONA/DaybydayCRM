@@ -8,7 +8,7 @@ class DataService
     function clearDataExcept (array $excludedTables = [])
     {
         // desactivation des cles etrangeres
-        DB::statement('SET FOREIGN_KEY-CHEKS=0;');
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
         // recuperer tous les tables
         $tables = DB::select ('SHOW TABLES');
@@ -34,6 +34,6 @@ class DataService
         }
 
         // reactivation des cles etrangeres
-        DB::statement('SET FOREIGN_KEY-CHEKS=1;');
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }

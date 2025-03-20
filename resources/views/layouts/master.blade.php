@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+<?php 
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\App;
+?>
 <head>
     <meta charset="UTF-8">
     <title>Daybyday CRM</title>
@@ -173,6 +177,17 @@
                 </div>
             @endif
         </div>
+        
+        <a href="#data" class=" list-group-item" data-toggle="collapse" data-parent="#MainMenu"><i
+                class="fa fa-dollar sidebar-icon"></i><span id="menu-txt">{{ __('Data') }}</span>
+                <i class="icon ion-md-arrow-dropup arrow-side sidebar-arrow"></i></a>
+            <div class="collapse" id="data">
+            <a href="{{ route('data.clear')}}" class="list-group-item childlist"> 
+                <i class="bullet-point"><span></span></i> {{ __('Clear Data') }}
+            </a>
+            <a href="{{ route('products.index')}}" class="list-group-item childlist"> 
+                <i class="bullet-point"><span></span></i> {{ __('Import Data') }}
+        </a>
     </nav>
 
 
