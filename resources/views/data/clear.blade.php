@@ -5,16 +5,6 @@
 @stop
 
 @section('content')
-    <h2>Excluded Tables</h2>
-    <ul>
-        @foreach ($excludedTables as $table)
-            <li>{{ $table }}</li>
-        @endforeach
-    </ul>
-    <h3>Count : {{$count}}</h3>
-    <h3>Test : {{$list}}</h3>
-
-
     {!! Form::open([
             'route' => 'data.clear-data',
             ]) !!}

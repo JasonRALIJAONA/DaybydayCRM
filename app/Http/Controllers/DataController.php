@@ -14,7 +14,7 @@ class DataController extends Controller
         
         // Debugging: Log the excluded tables
         Log::info('Excluded Tables: ', $excludedTables);
-        return view('data.clear' , ['excludedTables' => $excludedTables , 'count' => count($excludedTables) , 'list' => $list]);
+        return view('data.clear');
     }
 
     public function clearData()
