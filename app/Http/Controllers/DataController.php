@@ -40,16 +40,16 @@ class DataController extends Controller
         $file = $request->file('file');
 
         // Get the original filename
-        $filename = $file->getClientOriginalName();
+        $filename = $file->getPathname();
 
         // Move the file to a specific directory within storage/app/import
-        $path = $file->storeAs('import', $filename);
+        // $path = $file->storeAs('import', $filename);
 
-        // Get the full path to the stored file
-        $fullPath = storage_path('app/' . $path);
+        // // Get the full path to the stored file
+        // $fullPath = storage_path('app/' . $path);
         
         $dataService = new DataService();
-        $dataService->import_industry($fullPath);
+        $dataService->import_industry($filename);
         Session()->flash('flash_message', __('Data imported successfully!'));
         return redirect()->route('data.import');
     }

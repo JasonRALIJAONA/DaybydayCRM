@@ -5,16 +5,17 @@
 @stop
 
 @section('content')
-    {!! Form::open([
-            'route' => 'data.import-data',
-            'files' => true
-            ]) !!}
-    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-    <div class="form-group">
-        {!! Form::label('file', __('File to import') . ':', ['class' => 'control-label thin-weight']) !!}
-        {!! Form::file('file', null,['class' => 'form-control']) !!}
-    </div>
-    {!! Form::submit(__("Import data"), ['class' => 'btn btn-md btn-brand']) !!}
+    <div class="container">
+        <h2>Importer un fichier CSV</h2>
 
-    {!! Form::close() !!}
+        <form action="{{ url('data/import-data') }}" method="post" enctype="multipart/form-data">
+            @csrf
+            <div class="form-group">
+                <label for="file"> Selectionner le fichier csv </label>
+                <input type="file" name="file" class="form-control">
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-2"> Importer </button>
+        </form>
+    </div>
 @endsection
