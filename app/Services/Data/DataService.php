@@ -4,6 +4,7 @@ namespace App\Services\Data;
 use Illuminate\Support\Facades\DB;
 use App\Models\Industry;
 use Illuminate\Support\Facades\Log;
+use App\Models\User;
 
 class DataService
 {

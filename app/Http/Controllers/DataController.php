@@ -5,9 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request; 
 use App\Services\Data\DataService;
 use Illuminate\Support\Facades\Log;
+use App\Models\User;
+use App\Services\Data\CsvExporter;
+
 
 class DataController extends Controller
 {
+    private $csvExporter;
+
+    public function __construct(CsvExporter $csvExporter)
+    {
+        $this->csvExporter = $csvExporter;
+    }
+
     public function getClear()
     {
         $excludedTables = explode(',', env('EXCLUDED_TABLE', ''));
@@ -53,4 +63,25 @@ class DataController extends Controller
         Session()->flash('flash_message', __('Data imported successfully!'));
         return redirect()->route('data.import');
     }
+
+    public function getExport()
+    {
+        return view('data.export');
+    }
+
+    public function exportData()
+    {
+        $data = User::all(['id' , 'name' , 'email', 'address' , 'created_at'])->toArray();
+
+        $header = [
+            'id',
+            'name',
+            'email',
+            'address',
+            'created_at',
+        ];
+
+        // Session()->flash('flash_message', __('Data exported successfully!'));
+        return $this->csvExporter->export($data, $header, 'export.csv');
+    }   
 }

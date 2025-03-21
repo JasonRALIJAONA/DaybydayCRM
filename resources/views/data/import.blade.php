@@ -5,6 +5,8 @@
 @stop
 
 @section('content')
+    di
+
     {!! Form::open([
             'route' => 'data.import-data',
             'files' => true

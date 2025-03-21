@@ -245,4 +245,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/clear-data', 'DataController@clearData')->name('data.clear-data');
         Route::post('/import-data', 'DataController@ImportData')->name('data.import-data');
         Route::get('/import', 'DataController@getImport')->name('data.import');
+        Route::get('/export', 'DataController@getExport')->name('data.export');
+        Route::post('/export-data', 'DataController@ExportData')->name('data.export-data');
     });
