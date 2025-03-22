@@ -39,6 +39,14 @@ class DataController extends Controller
         return redirect()->route('data.clear');
     }
 
+    public function generateData()
+    {
+        $dataService = new DataService();
+        $dataService->resetAndSeedDatabase();
+        Session()->flash('flash_message', __('Data generated successfully!'));
+        return redirect()->route('data.clear');
+    }
+
     public function getImport()
     {
         return view('data.import');    
