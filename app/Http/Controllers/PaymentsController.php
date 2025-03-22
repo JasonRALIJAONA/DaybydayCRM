@@ -54,6 +54,20 @@ class PaymentsController extends Controller
             return redirect()->route('invoices.show', $invoice->external_id);
         }
 
+        // Calculate the total payments for the invoice
+        $totalPayments = $invoice->payments()->sum('amount');
+        $newPaymentAmount = $request->amount * 100;
+
+        $toPay = $invoice->invoiceLines()->sum(\Illuminate\Support\Facades\DB::raw('price * quantity'));
+        $toPay = (float) $toPay;
+
+
+        // Check if the total payments exceed the invoice amount
+        if (($totalPayments + $newPaymentAmount) > $toPay) {
+            session()->flash('flash_message_warning', __("Total payments exceed the invoice amount"));
+            return redirect()->back();
+        }
+
         $payment = Payment::create([
             'external_id' => Uuid::uuid4()->toString(),
             'amount' => $request->amount * 100,
