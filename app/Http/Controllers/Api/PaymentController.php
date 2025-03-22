@@ -37,4 +37,42 @@ class PaymentController extends Controller
         ], 200);
         
     }
+
+    public function update($id)
+    {
+        $payment = Payment::where('id', $id)->first();
+
+        if (!$payment) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Payment not found',
+            ], 200);
+        }
+
+        $payment->update(request()->all());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Payment updated',
+        ], 200);
+    }
+
+
+    public function show($id)
+    {
+        $payment = Payment::where('id', $id)->first();
+
+        if (!$payment) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Payment not found',
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Payment data',
+            'data' => $payment,
+        ], 200);
+    }
 }
