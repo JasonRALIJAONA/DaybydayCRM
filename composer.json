@@ -20,6 +20,7 @@
         "php": ">=7.3.9",
         "aws/aws-sdk-php": "^3.112",
         "elasticsearch/elasticsearch": "^6.1",
+        "fruitcake/laravel-cors": "^3.0",
         "google/apiclient": "^2.2",
         "guzzlehttp/guzzle": "^6.3",
         "laravel/cashier": "^10.2",

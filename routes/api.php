@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -12,6 +13,16 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\DashboardController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\PaymentController;
+
+Route::post('login', [AuthController::class, 'login']);
+Route::get('dashboard', [DashboardController::class, 'index']);
+Route::delete('payments/{id}', [PaymentController::class, 'delete']);
+Route::get('payments', [PaymentController::class, 'index']);
 
 Route::group(['namespace' => 'App\Api\v1\Controllers'], function () {
     Route::group(['middleware' => 'auth:api'], function () {
