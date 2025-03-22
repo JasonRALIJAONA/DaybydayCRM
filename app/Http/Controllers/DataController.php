@@ -71,14 +71,15 @@ class DataController extends Controller
 
     public function exportData()
     {
-        $data = User::all(['id' , 'name' , 'email', 'address' , 'created_at'])->toArray();
+        $data = User::all(['name' , 'email', 'address' , 'created_at'])->toArray();
+        // dd($data);
 
         $header = [
-            'id',
             'name',
             'email',
             'address',
             'created_at',
+            'avatar'
         ];
 
         // Session()->flash('flash_message', __('Data exported successfully!'));

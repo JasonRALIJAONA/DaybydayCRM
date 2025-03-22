@@ -1,7 +1,7 @@
 {{-- contains a button to clear data --}}
 @extends('layouts.master')
 @section('heading')
-    {{__('Clear data')}}
+    {{__('Export data')}}
 @stop
 
 @section('content')

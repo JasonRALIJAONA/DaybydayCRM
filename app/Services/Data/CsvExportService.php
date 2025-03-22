@@ -23,10 +23,6 @@ class CsvExportService implements FromArray , WithCustomCsvSettings
         return $this->data;
     }
 
-    public function exportCSV($data , $header)
-    {
-        return Excel::download(new CsvExportService($data , $header), 'export.csv');
-    }
 
     public function getCsvSettings() : array
     {
