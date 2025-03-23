@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
+use App\Services\Invoice\InvoiceCalculator;
 
 class PaymentController extends Controller
 {
@@ -40,7 +41,19 @@ class PaymentController extends Controller
 
     public function update($id)
     {
+        // dd(request()->amount);
+
         $payment = Payment::where('id', $id)->first();
+        $invoice = $payment->invoice;
+        $invoiceCalculator = new InvoiceCalculator($invoice);
+        $newAmountDue = $invoiceCalculator->getAmountDue()->getAmount() - (request()->amount * 100) + $payment->amount;
+
+        if ($newAmountDue < 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'The update exceeds the amount due',
+            ], 200);
+        }
 
         if (!$payment) {
             return response()->json([
@@ -49,6 +62,7 @@ class PaymentController extends Controller
             ], 200);
         }
 
+        request()->merge(['amount' => request()->amount * 100]);
         $payment->update(request()->all());
 
         return response()->json([
