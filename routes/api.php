@@ -20,14 +20,21 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PaymentController;
 
 Route::post('login', [AuthController::class, 'login']);
-Route::get('dashboard', [DashboardController::class, 'index']);
-Route::delete('payments/{id}', [PaymentController::class, 'delete']);
-Route::put('payments/{id}', [PaymentController::class, 'update']);
-Route::get('payments', [PaymentController::class, 'index']);
-Route::get('payments/{id}', [PaymentController::class, 'show']);
+// Route::get('dashboard', [DashboardController::class, 'index']);
 
 Route::group(['namespace' => 'App\Api\v1\Controllers'], function () {
     Route::group(['middleware' => 'auth:api'], function () {
         Route::get('users', ['uses' => 'UserController@index']);
+    });
+});
+
+Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {
+    Route::group(['middleware' => 'auth:api'], function () {
+        // Route::get('users', ['uses' => 'UserController@index']);
+        Route::get('dashboard', [DashboardController::class, 'index']);
+        Route::get('payments', [PaymentController::class, 'index']);
+        Route::delete('payments/{id}', [PaymentController::class, 'delete']);
+        Route::put('payments/{id}', [PaymentController::class, 'update']);
+        Route::get('payments/{id}', [PaymentController::class, 'show']);
     });
 });
