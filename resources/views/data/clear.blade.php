@@ -14,4 +14,14 @@
     </div>
 
     {!! Form::close() !!}
+
+    {!! Form::open([
+            'route' => 'data.generate'
+            ]) !!}
+    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+    <div class="form-group">
+        {!! Form::submit(__("Generate data"), ['class' => 'btn btn-md btn-success']) !!}
+    </div>
+
+    {!! Form::close() !!}
 @endsection

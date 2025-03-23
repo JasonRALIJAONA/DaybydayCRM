@@ -20,6 +20,7 @@
         "php": ">=7.3.9",
         "aws/aws-sdk-php": "^3.112",
         "elasticsearch/elasticsearch": "^6.1",
+        "fruitcake/laravel-cors": "^3.0",
         "google/apiclient": "^2.2",
         "guzzlehttp/guzzle": "^6.3",
         "laravel/cashier": "^10.2",
@@ -35,6 +36,7 @@
         "predis/predis": "^1.1",
         "ramsey/uuid": "^3.6",
         "spatie/dropbox-api": "^1.19",
+        "tymon/jwt-auth": "^1.0",
         "usmanhalalit/laracsv": "^2.1",
         "yajra/laravel-datatables-oracle": "~9.0"
     },

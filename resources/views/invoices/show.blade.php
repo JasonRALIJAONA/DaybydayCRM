@@ -165,6 +165,10 @@
                             </div>
                         @endif
                         <hr>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="addDiscountCheckbox">
+                            <label class="form-check-label" for="addDiscountCheckbox">{{ 'Add discount ('.$discount->value.' %)' }}</label>
+                        </div>
                         <div class="col-md-6">
                             @if(Entrust::can('invoice-pay'))
                                         <button type="button" id="update-payment" class="btn btn-md btn-brand btn-full-width closebtn"
@@ -215,6 +219,7 @@
                     'method' => 'post',
                     'route' => ['invoice.sent', $invoice->external_id],
                     ]) !!}
+                    <input type="hidden" name="discount" id="discountInput" value="false">
                     @if($apiconnected)
                     <p>{{ __('We have found this contact from your billing integration, do you wish for us to create the invoice in your your billing system as well?, than please choose a contact below') }}</p>
                     <select name="invoiceContact"
@@ -273,6 +278,15 @@
 @push('scripts')
     <script type="text/javascript">
         $(document).ready(function () {
+            // new function
+            $('#addDiscountCheckbox').change(function() {
+                if(this.checked) {
+                    $('#discountInput').val('true');
+                } else {
+                    $('#discountInput').val('false');
+                }
+            });
+
             if($('#sendMailCheckbox').val() == ""){
                 $('#sendMailBox').hide();
             }
