@@ -30,6 +30,7 @@ use App\Models\Offer;
 use App\Models\Product;
 use App\Services\InvoiceNumber\InvoiceNumberService;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Discount;
 
 class InvoicesController extends Controller
 {
@@ -81,6 +82,9 @@ class InvoicesController extends Controller
         $subPrice = $invoiceCalculator->getSubTotal();
         $vatPrice = $invoiceCalculator->getVatTotal();
         $amountDue = $invoiceCalculator->getAmountDue();
+
+        // Send discount information
+        $discount = Discount::first();
         
         return view('invoices.show')
             ->withInvoice($invoice)
@@ -94,6 +98,7 @@ class InvoicesController extends Controller
             ->withPaymentSources(PaymentSource::values())
             ->withAmountDue($amountDue)
             ->withSource($invoice->source)
+            ->withDiscount($discount)
             ->withCompanyName(Setting::first()->company);
     }
 
@@ -106,6 +111,7 @@ class InvoicesController extends Controller
      */
     public function updateSentStatus(Request $request, $external_id)
     {
+        // dd($request->discount);
         if (!auth()->user()->can('invoice-send')) {
             session()->flash('flash_message_warning', __('You do not have permission to send an invoice'));
             return redirect()->route('invoices.show', $external_id);
@@ -128,6 +134,17 @@ class InvoicesController extends Controller
         $invoice->due_at  =  $result["due_at"];
         $invoice->invoice_number = app(InvoiceNumberService::class)->setInvoiceNumber($result["invoice_number"]);
         $invoice->save();
+
+        // add discount if there is any
+        if ($request->discount) {
+            $discount = Discount::first();
+            foreach ($invoice->invoiceLines as $invoiceLine) {
+                $originalPrice = $invoiceLine->price;
+                $discountedPrice = $originalPrice - ($originalPrice * ($discount->value / 100));
+                $invoiceLine->price = $discountedPrice;
+                $invoiceLine->save();
+            }
+        }
 
         return redirect()->back();
     }

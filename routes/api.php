@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\DiscountController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PaymentController;
 
@@ -36,5 +37,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {
         Route::delete('payments/{id}', [PaymentController::class, 'delete']);
         Route::put('payments/{id}', [PaymentController::class, 'update']);
         Route::get('payments/{id}', [PaymentController::class, 'show']);
+        Route::get('discounts/{id}', [DiscountController::class, 'show']);
+        Route::put('discounts/{id}', [DiscountController::class, 'update']);
     });
 });
