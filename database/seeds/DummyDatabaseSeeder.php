@@ -15,5 +15,7 @@ class DummyDatabaseSeeder extends Seeder
         $this->call('ClientsDummyTableSeeder');
         $this->call('TasksDummyTableSeeder');
         $this->call('LeadsDummyTableSeeder');
+        $this->call(InvoiceSeeder::class); // Register the InvoiceSeeder
+        $this->call(PaymentSeeder::class); 
     }
 }

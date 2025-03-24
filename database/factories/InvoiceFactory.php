@@ -10,5 +10,7 @@ $factory->define(Invoice::class, function (Faker $faker) {
         'external_id' => $faker->uuid,
         'status' => 'draft',
         'client_id' => factory(\App\Models\Client::class),
+        'sent_at' => $faker->dateTime,
+        'due_at' => $faker->dateTime,
     ];
 });
