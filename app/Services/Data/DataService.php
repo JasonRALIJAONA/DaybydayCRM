@@ -40,12 +40,21 @@ class DataService
         // reactivation des cles etrangeres
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
-
+  
     function clearData()
     {
+        Log::info('clearData function called');
+
         Log::info('Starting migrate:fresh');
-        Artisan::call('migrate:fresh', ['--seed' => true]);
-        Log::info('Finished migrate:fresh');
+        $output = shell_exec('cd ' . base_path() . ' && php artisan migrate:fresh --seed 2>&1');
+        Log::info('Finished migrate:fresh', ['output' => $output]);
+
+        // Check for errors
+        if (strpos($output, 'SQLSTATE') !== false) {
+            Log::error('Error during migrate:fresh', ['output' => $output]);
+        }
+
+        Log::info('clearData function completed');
     }
 
     function import_industry($filename) 
