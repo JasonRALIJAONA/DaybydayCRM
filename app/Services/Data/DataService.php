@@ -41,6 +41,13 @@ class DataService
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 
+    function clearData()
+    {
+        Log::info('Starting migrate:fresh');
+        Artisan::call('migrate:fresh', ['--seed' => true]);
+        Log::info('Finished migrate:fresh');
+    }
+
     function import_industry($filename) 
     {
         Log::info('Importing industry data from file: ' . $filename);
@@ -69,12 +76,12 @@ class DataService
 
     public function resetAndSeedDatabase()
     {
-        Log::info('Starting migrate:fresh');
-        exec('php artisan migrate:fresh --seed', $output1);
-        Log::info('Finished migrate:fresh', $output1);
+        // Log::info('Starting migrate:fresh');
+        // exec('php artisan migrate:fresh --seed', $output1);
+        // Log::info('Finished migrate:fresh', $output1);
 
         Log::info('Starting DummyDatabaseSeeder');
-        exec('php artisan db:seed --class=DummyDatabaseSeeder', $output2);
-        Log::info('Finished DummyDatabaseSeeder', $output2);
+        Artisan::call('db:seed', ['--class' => 'DummyDatabaseSeeder']);
+        Log::info('Finished DummyDatabaseSeeder');
     }
 }

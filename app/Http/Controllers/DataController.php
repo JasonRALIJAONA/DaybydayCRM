@@ -35,6 +35,7 @@ class DataController extends Controller
 
         $dataService = new DataService();
         $dataService->clearDataExcept($excludedTables);
+        // $dataService->clearData();
         Session()->flash('flash_message', __('Data cleared successfully!'));
         return redirect()->route('data.clear');
     }
