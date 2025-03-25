@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Invoice;
 use Illuminate\Http\Request; 
 use App\Services\Data\DataService;
 use Illuminate\Support\Facades\Log;
