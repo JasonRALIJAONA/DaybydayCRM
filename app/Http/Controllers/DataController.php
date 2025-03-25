@@ -8,7 +8,10 @@ use App\Services\Data\DataService;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use App\Services\Data\CsvExporter;
-
+use App\Services\Data\ImportService;
+use Exception;
+use Google\Service\Fitness\Session;
+use Illuminate\Support\Facades\DB;
 
 class DataController extends Controller
 {
@@ -35,8 +38,8 @@ class DataController extends Controller
         $excludedTables = explode(',', env('EXCLUDED_TABLE', ''));
 
         $dataService = new DataService();
-        // $dataService->clearDataExcept($excludedTables);
-        $dataService->clearData();
+        $dataService->clearDataExcept($excludedTables);
+        // $dataService->clearData();
         Session()->flash('flash_message', __('Data cleared successfully!'));
         return redirect()->route('data.clear');
     }
@@ -57,19 +60,42 @@ class DataController extends Controller
     public function importData(Request $request)
     {
         // Get the uploaded file
-        $file = $request->file('file');
+        $file1 = $request->file('file1');
+        $filename1 = $file1->getPathname();
 
-        // Get the original filename
-        $filename = $file->getPathname();
 
-        // Move the file to a specific directory within storage/app/import
-        // $path = $file->storeAs('import', $filename);
+        $file2 = $request->file('file2');
+        $filename2 = $file2->getPathname();
 
-        // // Get the full path to the stored file
-        // $fullPath = storage_path('app/' . $path);
+        $file3 = $request->file('file3');
+        $filename3 = $file3->getPathname();
+        $realFileName = $file3->getClientOriginalName();
         
-        $dataService = new DataService();
-        $dataService->import_industry($filename);
+        $importService = new ImportService();
+
+        $error = [];
+
+        try {
+            DB::beginTransaction();
+            $importService->importProjectAndClient($filename1);
+            $importService->importTask($filename2);
+            $error = $importService->importLeadProductInvoice($filename3 , $realFileName);
+
+            if (!Empty($error)) {
+                throw new Exception();
+            }
+
+            Log::info('Data imported successfully');
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            // Log::error('Stack trace: ' . $e->getTraceAsString());
+            Session()->flash('flash_message_warning', __('Error importing data!'));
+            return view('data.import' , ['err' => $error]);
+        }
+
+        // $dataService->import_industry($filename);
         Session()->flash('flash_message', __('Data imported successfully!'));
         return redirect()->route('data.import');
     }
