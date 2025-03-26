@@ -118,6 +118,7 @@ class ImportService
     public function importLeadProductInvoice($filename , $realFileName)  {
         $faker = Faker::create();
         $error = [];
+        // $csvlines = [];
         // Open the CSV file
         if (($handle = fopen($filename, 'r')) !== false) {
             // Read the header row
@@ -129,6 +130,18 @@ class ImportService
                 // Create an associative array with the header as keys
                 $row = array_combine($header, $data);
                 $lineNumber++;
+
+                $csvline = implode(',' , $data);
+
+                // if (in_array($csvline,$csvlines)) {
+                //     $error[]=[
+                //         'file' => $realFileName,
+                //         'line' => $lineNumber,
+                //         'message' => 'Double found',
+                //     ];
+                // }else {
+                //     $csvlines[] = $csvline;
+                // }
 
                 // $projectId = Project::where('title', $row['project_title'])->value('id');
                 $userAssignedId = User::inRandomOrder()->value('id') ?? factory(User::class)->create()->id;
@@ -150,7 +163,7 @@ class ImportService
                         'message' => 'Quantity cannot be negative',
                     ];
 
-                    continue;
+                    // continue;
                 }
 
                 // Insert product
@@ -177,15 +190,6 @@ class ImportService
 
                 $statusOffer = $row['type'] == 'invoice' ? 'won' : 'in-progress';
 
-                $offer = Offer::create(
-                    [
-                    'status' => $statusOffer,
-                    'source_id' =>$lead->id,
-                    'external_id' => $faker->uuid,
-                    'source_type' => Lead::class,
-                    'client_id' => $clientId,
-                ]);
-
                 // check the type
                 if ($row['type'] == 'invoice') {
                     // create invoice
@@ -197,21 +201,21 @@ class ImportService
                         'source_type' => Lead::class,
                         'source_id' => $lead->id,
                         'due_at' => now()->addMonth(),
-                        'offer_id' => $offer->id,
+                        // 'offer_id' => $offer->id,
                         'client_id' => $clientId,
                     ]);
 
-                    InvoiceLine::create(
-                    [
-                        'external_id' => $faker->uuid,
-                        'title' => $row['produit'],
-                        'type' => $product->default_type,
-                        'comment' => $faker->sentence,
-                        'quantity' => $row['quantite'],
-                        'price' => $row['prix'],
-                        'offer_id' => $offer->id,
-                    ]
-                    );
+                    // InvoiceLine::create(
+                    // [
+                    //     'external_id' => $faker->uuid,
+                    //     'title' => $row['produit'],
+                    //     'type' => $product->default_type,
+                    //     'comment' => $faker->sentence,
+                    //     'quantity' => $row['quantite'],
+                    //     'price' => $row['prix'],
+                    //     'offer_id' => $offer->id,
+                    // ]
+                    // );
 
                     InvoiceLine::create(
                     [
@@ -226,6 +230,15 @@ class ImportService
                     );
 
                 }elseif ($row['type'] == 'offers') {
+                    $offer = Offer::create(
+                        [
+                        'status' => $statusOffer,
+                        'source_id' =>$lead->id,
+                        'external_id' => $faker->uuid,
+                        'source_type' => Lead::class,
+                        'client_id' => $clientId,
+                    ]);
+
                     InvoiceLine::create(
                         [
                             'external_id' => $faker->uuid,

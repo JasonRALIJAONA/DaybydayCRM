@@ -7,6 +7,7 @@ use App\Models\Invoice;
 use App\Models\Offer;
 use App\Models\Payment;
 use App\Models\Task;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -18,6 +19,10 @@ class DashboardController extends Controller
         $tasks = Task::all()->toArray();
         $offers = Offer::all()->toArray();
         $invoices = Invoice::all()->toArray();
+        $totalInvoice = Invoice::count();
+
+        $totalInvoicePrice = DB::select("SELECT sum(price * quantity) as amount FROM invoice_lines WHERE invoice_id IS NOT NULL")[0]->amount;
+
 
         return response()->json([
             'success' => true,
@@ -26,6 +31,8 @@ class DashboardController extends Controller
                 'totalPayment' => $totalPayment,
                 'totalTask' => $totalTask,
                 'totalOffer' => $totalOffer,
+                'totalInvoice' =>$totalInvoice,
+                'totalInvoicePrice' => $totalInvoicePrice,
                 'tasks' => $tasks,
                 'offers' => $offers,
                 'invoices' => $invoices,
