@@ -4,11 +4,16 @@
 
 use App\Models\Invoice;
 use Faker\Generator as Faker;
+use App\Models\Client;
 
 $factory->define(Invoice::class, function (Faker $faker) {
     return [
         'external_id' => $faker->uuid,
-        'status' => 'draft',
-        'client_id' => factory(\App\Models\Client::class),
+        'status' => $faker->randomElement(['draft', 'closed' , 'sent' , 'unpaid' , 'partial_paid' , 'paid' , 'overpaid']),
+        'client_id' => function () {
+            return Client::inRandomOrder()->value('id') ?? factory(Client::class)->create()->id;
+        },
+        'sent_at' => $faker->dateTime,
+        'due_at' => $faker->dateTime,
     ];
 });

@@ -133,10 +133,17 @@ class InvoicesController extends Controller
         $invoice->status  =  InvoiceStatus::unpaid()->getStatus();
         $invoice->due_at  =  $result["due_at"];
         $invoice->invoice_number = app(InvoiceNumberService::class)->setInvoiceNumber($result["invoice_number"]);
-        $invoice->save();
+        // dd($request->discount);
+        if ($request->discount == 'true') {
+            $discount = Discount::first();
+            $invoice->reduction = $discount->value;   
+        }
 
+        $invoice->save();
+        
         // add discount if there is any
-        if ($request->discount) {
+        // dd($request->discount);
+        if ($request->discount == 'true') {
             $discount = Discount::first();
             foreach ($invoice->invoiceLines as $invoiceLine) {
                 $originalPrice = $invoiceLine->price;
@@ -146,6 +153,8 @@ class InvoicesController extends Controller
             }
         }
 
+
+        
         return redirect()->back();
     }
 

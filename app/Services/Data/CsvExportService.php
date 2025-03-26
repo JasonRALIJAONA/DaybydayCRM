@@ -27,7 +27,7 @@ class CsvExportService implements FromArray , WithCustomCsvSettings
     public function getCsvSettings() : array
     {
         return [
-            'delimiter' => ';',
+            'delimiter' => ',',
             'enclosure' => '',
             'line_ending' => "\n",
         ];

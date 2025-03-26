@@ -5,6 +5,7 @@
         @include('partials.userheader', ['changeUser' => true])
     </div>
     <div class="row">
+        <a href={{ "/data/duplicate/".$client->id}}><button class="btn btn-success">Duplicate</button></a>
         <div class="col-md-9">
             <div class="tablet">
                 <div class="tablet__head">

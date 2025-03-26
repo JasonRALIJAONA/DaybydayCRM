@@ -28,6 +28,7 @@ class Invoice extends Model
         'status',
         'sent_at',
         'due_at',
+        'discount',
         'client_id',
         'integration_invoice_id',
         'integration_type',

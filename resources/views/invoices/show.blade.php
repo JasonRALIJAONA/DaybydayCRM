@@ -84,6 +84,17 @@
                                     </div>
                                 </div>
                             </div>
+                        <!-- Reduction --->
+                            <div class="tablet__item" style="padding: 0;">
+                                <div class="tablet__item__info">
+                                    <span>@lang('Discount')</span>
+                                </div>
+                                <div class="tablet__item__toolbar">
+                                    <div class="dropdown dropdown-inline">
+                                        <span>{{$invoice->reduction . " % "}}</span>
+                                    </div>
+                                </div>
+                            </div>
                         <!-- Total price--->
                             <div class="tablet__item" style="padding: 0;">
                                 <div class="tablet__item__info">

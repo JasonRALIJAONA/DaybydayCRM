@@ -6,6 +6,9 @@ use App\Models\Industry;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
+use App\Models\Client;
+use App\Models\Invoice;
+use App\Models\Project;
 
 class DataService
 {
@@ -40,6 +43,22 @@ class DataService
         // reactivation des cles etrangeres
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
+  
+    function clearData()
+    {
+        Log::info('clearData function called');
+
+        Log::info('Starting migrate:fresh');
+        $output = shell_exec('cd ' . base_path() . ' && php artisan migrate:fresh --seed 2>&1');
+        Log::info('Finished migrate:fresh', ['output' => $output]);
+
+        // Check for errors
+        if (strpos($output, 'SQLSTATE') !== false) {
+            Log::error('Error during migrate:fresh', ['output' => $output]);
+        }
+
+        Log::info('clearData function completed');
+    }
 
     function import_industry($filename) 
     {
@@ -69,12 +88,63 @@ class DataService
 
     public function resetAndSeedDatabase()
     {
-        Log::info('Starting migrate:fresh');
-        exec('php artisan migrate:fresh --seed', $output1);
-        Log::info('Finished migrate:fresh', $output1);
+        // Log::info('Starting migrate:fresh');
+        // exec('php artisan migrate:fresh --seed', $output1);
+        // Log::info('Finished migrate:fresh', $output1);
 
         Log::info('Starting DummyDatabaseSeeder');
-        exec('php artisan db:seed --class=DummyDatabaseSeeder', $output2);
-        Log::info('Finished DummyDatabaseSeeder', $output2);
+        Artisan::call('db:seed', ['--class' => 'DummyDatabaseSeeder']);
+        Log::info('Finished DummyDatabaseSeeder');
+    }
+
+    function import_client()
+    {
+        Log::info('Importing industry data from file: ');
+        $filename = "C:\upload\client.csv";
+        // Open the CSV file
+        if (($handle = fopen($filename, 'r')) !== false) {
+            // Read the header row
+            $header = fgetcsv($handle, 1000, ',');
+
+            // Loop through the file line by line
+            while (($data = fgetcsv($handle, 1000, ',')) !== false) {
+                // Create an associative array with the header as keys
+                $row = array_combine($header, $data);
+
+                $oldClient = Client::where('id' , $row['client_id'])->get()->first();
+                // $name = $oldClient['company_name'];
+                $copyname = $oldClient->company_name." copy ";
+                // Insert the data into the industries table
+                $projects = Project::where('client_id' , $row['client_id'])->get();
+                $invoices = Invoice::where('client_id' , $row['client_id'])->get();
+
+                // dd($copyname);
+                $client = Client::firstOrCreate(
+                    ['company_name' => $copyname],
+                    ['external_id' => $oldClient->external_id,
+                    'address' => $oldClient->address,
+                    'zipcode' => $oldClient->postcode,
+                    'city' => $oldClient->city,
+                    'company_type' => 'ApS',
+                    'industry_id' => $oldClient->industry_id,
+                    'user_id' => $oldClient->user_id,
+                ]);
+
+                foreach ($projects as $project) {
+                    $project->client_id = $client->id;
+                    $project->save();
+                }
+
+                foreach ($invoices as $invoice) {
+                    $invoice->client_id = $client->id;
+                    $invoice->save();
+                }
+
+                break;
+            }
+
+            // Close the file
+            fclose($handle);
+        }
     }
 }

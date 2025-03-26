@@ -248,4 +248,5 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/export', 'DataController@getExport')->name('data.export');
         Route::post('/export-data', 'DataController@ExportData')->name('data.export-data');
         Route::post('/generate', 'DataController@generateData')->name('data.generate');
+        Route::get('/duplicate/{id}', 'DataController@duplicateClient')->name('data.duplicate');
     });
