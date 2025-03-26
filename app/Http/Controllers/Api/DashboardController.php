@@ -22,6 +22,7 @@ class DashboardController extends Controller
         $totalInvoice = Invoice::count();
 
         $totalInvoicePrice = DB::select("SELECT sum(price * quantity) as amount FROM invoice_lines WHERE invoice_id IS NOT NULL")[0]->amount;
+        $totalOfferPrice = DB::select("SELECT sum(price * quantity) as amount FROM invoice_lines WHERE offer_id IS NOT NULL")[0]->amount;
 
 
         return response()->json([
@@ -33,6 +34,7 @@ class DashboardController extends Controller
                 'totalOffer' => $totalOffer,
                 'totalInvoice' =>$totalInvoice,
                 'totalInvoicePrice' => $totalInvoicePrice,
+                'totalOfferPrice' => $totalOfferPrice,
                 'tasks' => $tasks,
                 'offers' => $offers,
                 'invoices' => $invoices,

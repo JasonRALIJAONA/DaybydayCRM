@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\OfferController;
+use App\Http\Controllers\Api\InvoiceController;
 
 Route::post('login', [AuthController::class, 'login']);
 
@@ -45,5 +46,6 @@ Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {
         Route::put('discounts/{id}', [DiscountController::class, 'update']);
         Route::get('offers', [OfferController::class, 'index']);
         Route::get('tasks', [TaskController::class, 'index']);
+        Route::get('invoice-lines', [InvoiceController::class, 'index']);
     });
 });
