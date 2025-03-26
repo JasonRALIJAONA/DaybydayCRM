@@ -24,7 +24,7 @@ use App\Http\Controllers\Api\OfferController;
 use App\Http\Controllers\Api\InvoiceController;
 
 Route::post('login', [AuthController::class, 'login']);
-
+Route::get('import-client', [DashboardController::class, 'duplicate_client']);
 
 // Route::get('dashboard', [DashboardController::class, 'index']);
 

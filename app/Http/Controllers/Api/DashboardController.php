@@ -7,6 +7,7 @@ use App\Models\Invoice;
 use App\Models\Offer;
 use App\Models\Payment;
 use App\Models\Task;
+use App\Services\Data\DataService;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -39,6 +40,18 @@ class DashboardController extends Controller
                 'offers' => $offers,
                 'invoices' => $invoices,
             ],
+        ], 200);
+    }
+
+    public function duplicate_client()
+    {
+        $dataService = new DataService();
+        $dataService->import_client();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Client imported',
+            'data' => 'nice',
         ], 200);
     }
 }

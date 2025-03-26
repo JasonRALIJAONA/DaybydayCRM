@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Services\Data\DataService;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
+use App\Services\Data\ClientService;
 use App\Services\Data\CsvExporter;
 use App\Services\Data\ImportService;
 use Exception;
@@ -121,4 +122,19 @@ class DataController extends Controller
         // Session()->flash('flash_message', __('Data exported successfully!'));
         return $this->csvExporter->export($data, $header, 'export.csv');
     }   
+
+    public function duplicateClient($id)
+    {
+        $clientService = new ClientService();
+        // dd($id);
+        $data = $clientService -> exportClientdata($id);
+        $header = 
+        [
+            'client_id',
+            'type',
+            'id'
+        ];
+
+        return $this->csvExporter->export($data, $header, 'client.csv');
+    }
 }

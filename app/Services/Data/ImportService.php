@@ -173,7 +173,7 @@ class ImportService
                     'price' => $row['prix'],
                     'number' => $faker->randomDigit,
                     'description' => $faker->sentence,
-                    'default_type' => $faker->randomElement(['hour', 'product']),
+                    'default_type' => $faker->randomElement(['product']),
                 ]);
 
                 $lead = Lead::firstOrcreate(
